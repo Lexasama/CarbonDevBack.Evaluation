@@ -6,13 +6,6 @@ namespace Refacto
     public static class PriceService
     {
 
-        private static Dictionary<int, Func<decimal, decimal, decimal>> Formulas = new Dictionary<int, Func<decimal, decimal, decimal>>()
-        {
-            {1, (amount, disc) => TypeOne(amount, disc)},
-            {2, (amount, disc) => TypeTwo(amount, disc) },
-            {3, (amount, disc) => TypeThree(amount, disc) },
-            {4, (amount, disc) => TypeFour(amount, disc) }
-        };
         public static decimal CalculateDiscount(decimal amount, int type, int years)
         {
             // Refactorize this function
@@ -20,8 +13,44 @@ namespace Refacto
             decimal disc;
 
             disc = (years > 5) ? 5 / 100 : years / 100;
+            if (type == 1)
+            {
+                result = amount;
+            }
+            else if (type == 2)
+            {
+                result = (amount - (0.1m * amount)) - disc * (amount - (0.1m * amount));
+            }
+            else if (type == 3)
+            {
+                result = (0.7m * amount) - disc * (0.7m * amount);
+            }
+            else if (type == 4)
+            {
+                result = (amount - (0.5m * amount)) - disc * (amount - (0.5m * amount));
+            }
 
-            return Formulas[type].Invoke(amount, disc);
+            return result;
+        }
+
+        private static Dictionary<int, Func<decimal, decimal, decimal>> Formulas = new Dictionary<int, Func<decimal, decimal, decimal>>()
+        {
+            {1, (amount, disc) => TypeOne(amount, disc)},
+            {2, (amount, disc) => TypeTwo(amount, disc) },
+            {3, (amount, disc) => TypeThree(amount, disc) },
+            {4, (amount, disc) => TypeFour(amount, disc) }
+        };
+
+        public static decimal RefactoredCalculateDiscount(decimal amount, int type, int years)
+        {
+            // Refactorize this function
+            decimal result = 0;
+            decimal disc;
+
+            disc = (years > 5) ? 5 / 100 : years / 100;
+
+            return Formulas.TryGetValue(type, out var formula) ? formula.Invoke(amount, disc): Decimal.Zero;
+
         }
 
         private static decimal TypeThree(decimal amount, decimal disc)

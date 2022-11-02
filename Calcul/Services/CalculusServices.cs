@@ -24,6 +24,10 @@ namespace Calcul
         /// <returns></returns>
         public double Fraction(double a, double b)
         {
+            if (b == 0.00)
+            {
+                throw new DivideByZeroException();
+            }
             return a / b; 
         }
 
