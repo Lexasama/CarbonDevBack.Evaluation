@@ -12,7 +12,7 @@ namespace Refacto
             decimal result = 0;
             decimal disc;
 
-            disc = (years > 5) ? 5 / 100 : years / 100;
+            disc = (years > 5) ? 5m / 100m : years / 100m;
             if (type == 1)
             {
                 result = amount;
@@ -47,7 +47,7 @@ namespace Refacto
             decimal result = 0;
             decimal disc;
 
-            disc = (years > 5) ? 5 / 100 : years / 100;
+            disc = (years > 5) ? 5m / 100m : years / 100m;
 
             return Formulas.TryGetValue(type, out var formula) ? formula.Invoke(amount, disc): Decimal.Zero;
 
